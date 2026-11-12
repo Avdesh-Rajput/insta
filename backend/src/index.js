@@ -9,19 +9,26 @@ dotenv.config();
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// Routes
-app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// Export Express app for Vercel
+// Ensure MongoDB is connected before database operations
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Database connection failed:', error.message);
+    res.status(503).json({
+      message: 'Database unavailable',
+    });
+  }
+});
+
+app.use('/api/auth', authRoutes);
+
 module.exports = app;
