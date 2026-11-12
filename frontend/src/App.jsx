@@ -25,7 +25,7 @@ export default function App() {
       : { username: formData.username, password: formData.password };
 
     try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`https://insta-api-smoky.vercel.app${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
